@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+dataset_v2
+01 Environment/best_model.pth
+.DS_Store
