@@ -119,10 +119,11 @@ def main():
         if next == 'forward':
             forward(0.4)
         elif next == 'turn_left':
-            forward(1.3)
+            forward(1.6)
             turn_left(.73)
         elif next == 'turn_right':
-            turn_right(0.95)
+            forward(1.6)
+            turn_right(0.73)
         elif next == 'reverse':
             reverse(1)
             turn_left(0.7)
