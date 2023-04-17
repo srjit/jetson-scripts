@@ -1,6 +1,7 @@
 import subprocess
 import random
 import string
+import move
 
 import RPi.GPIO as GPIO
 import time
@@ -25,7 +26,6 @@ output_pin3 = 24  # BCM pin 24, BOARD pin 18
 output_pin4 = 25  # BCM pin 25, BOARD pin 22
 
 character_limit = 5
-
 
 def turn_right(turn_time):
 
@@ -58,8 +58,7 @@ def forward(running_time):
     time.sleep(running_time)
 
     GPIO.output(output_pin1, GPIO.LOW)
-    GPIO.output(output_pin4, GPIO.LOW)
-    
+    GPIO.output(output_pin4, GPIO.LOW)    
 
 
 def reverse(running_time):    
@@ -87,6 +86,8 @@ def capture():
     camera = nano.Camera(flip=0, width=640, height=480, fps=30)
     frame = camera.read()
     im = Image.fromarray(frame)
+
+    
     camera.release()
     return im
 
@@ -101,19 +102,29 @@ def initialize():
     
 
 
-def main():
+def main(steps):
     
     # Pin Setup:
     initialize()
 
-    for i in range(20):
+    for i in range(steps):
 
         print("Making next decision...")
 
-        stop()
+        #stop()
         image = capture()
         next = decision_engine.next_move(image)
 
+
+        foldername = "pictures"
+        name = ''.join(random.choices(string.ascii_uppercase +
+                                  string.digits, k=character_limit)) + "-" + next
+        savepath = os.path.join(foldername, name) + ".jpeg"
+        image.save(savepath)
+        
+
+
+        
         print("Decision: ", next)
 
         if next == 'forward':
@@ -129,9 +140,12 @@ def main():
             turn_left(0.7)
             stop()
 
+    stop()
+
         
 
 
 if __name__ == '__main__':
 
-    main()
+    steps = int(sys.argv[1])
+    main(steps)
