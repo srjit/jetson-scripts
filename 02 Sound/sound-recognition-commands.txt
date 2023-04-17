@@ -1,0 +1,12 @@
+
+* Sampling the audio
+
+arecord --device="hw:2,0" --format=S16_LE --rate=48000 --duration=5 samples/question.wav
+
+* Downsampling to 16kHz
+
+ffmpeg -i question.wav -ar 16000 output1.wav
+
+* Using Whisper ASR
+
+./main -m models/ggml-base.en.bin -f samples/question.wav
